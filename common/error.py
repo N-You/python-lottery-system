@@ -24,10 +24,26 @@ class RoleError(Exception):
     def __init__(self, message):
         self.message = message
 
+
 class LevelError(Exception):
-    def __init__(self,message):
+    def __init__(self, message):
         self.message = message
 
+
 class NegativeNumberError(Exception):
-    def __init__(self,message):
+    def __init__(self, message):
+        self.message = message
+
+
+class NotUserError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+class UserActiveError(Exception):
+    def __int__(self, message):
+        self.message = message
+
+class CountError(Exception):
+    def __int__(self,message):
         self.message = message

@@ -4,7 +4,7 @@ import os
 import time
 
 from common.utils import check_file, timestamp_to_string
-from common.error import UserExistsError, RoleError, LevelError, NegativeNumberError
+from common.error import UserExistsError, RoleError, LevelError, NegativeNumberError, CountError
 from common.consts import ROLES, FIRSTLEVELS, SECONDLEVELS
 
 
@@ -41,6 +41,8 @@ class Base(object):
             raise ValueError('missing username')
         if 'role' not in user:
             raise ValueError('missing role')
+        if user.get('role') not in ROLES:
+            raise RoleError('not use role %s' % user.get('role'))
 
         user['active'] = True
         user['create_time'] = time.time()
@@ -149,7 +151,8 @@ class Base(object):
         self.__save(gifts, self.gift_json)
         return True
 
-    def __gift_update(self, first_level, second_level, gift_name, gift_count=1):
+    def __gift_update(self, first_level, second_level, gift_name, gift_count=1, is_admin=False):
+        assert isinstance(gift_count, int), 'gift count not a int'
         data = self.__check_and_getgift(first_level, second_level, gift_name)
 
         if data == False:
@@ -161,15 +164,20 @@ class Base(object):
 
         current_gift = current_second_gift_pool[gift_name]
 
-        if current_gift['count'] - gift_count < 0:
-            raise NegativeNumberError('gift count can not nagative')
+        if is_admin == True:
+            if gift_count <= 0:
+                raise CountError('gift count can not 0')
+            current_gift['count'] = gift_count
+        else:
+          if current_gift['count'] - gift_count < 0:
+              raise NegativeNumberError('gift count can not nagative')
 
-        current_gift['count'] -= gift_count
+          current_gift['count'] -= gift_count
         current_second_gift_pool[gift_name] = current_gift
         current_gift_pool[second_level] = current_second_gift_pool
         gifts[first_level] = current_gift_pool
 
-        self.__save(gifts,self.gift_json)
+        self.__save(gifts, self.gift_json)
         return True
 
     def __delete_gift(self, first_level, second_level, gift_name):
@@ -213,6 +221,7 @@ class Base(object):
             'gifts': gifts
         }
 
+
 if __name__ == '__main__':
     gift_path = os.path.join(os.getcwd(), 'storage', 'gift.json')
     user_path = os.path.join(os.getcwd(), 'storage', 'user.json')
@@ -222,4 +231,3 @@ if __name__ == '__main__':
     # base.gift_update(first_level='level3', second_level='level1', gift_name='66')
     # res = base.delete_gift(first_level='level3', second_level='level1', gift_name='66')
     # print(res)
-
