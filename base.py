@@ -114,6 +114,9 @@ class Base(object):
                        'level3': {}},
             'level3': {'level1': {},
                        'level2': {},
+                       'level3': {}},
+            'level4': {'level1': {},
+                       'level2': {},
                        'level3': {}}
         }
         gifts = self.__read_gifts()

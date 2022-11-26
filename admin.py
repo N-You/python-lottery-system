@@ -66,7 +66,7 @@ class Admin(Base):
 if __name__ == '__main__':
     gift_path = os.path.join(os.getcwd(), 'storage', 'gift.json')
     user_path = os.path.join(os.getcwd(), 'storage', 'user.json')
-    admin = Admin('lihua', user_path, gift_path)
+    admin = Admin('小李', user_path, gift_path)
     # admin.update_user_active(username='xiaozhang')
-    # admin.add_gift(first_level='level1',second_level='level1',gift_name='糖豆',gift_count=12)
-    admin.update_gift(first_level='level1', second_level='level1', gift_name='糖豆', gift_count=1000)
+    # admin.add_gift(first_level='level4',second_level='level1',gift_name='ipad',gift_count=12)
+    # admin.update_gift(first_level='level1', second_level='level1', gift_name='糖豆', gift_count=1000)
